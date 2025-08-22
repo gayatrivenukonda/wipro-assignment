@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Share Market Portfolio Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body class="container mt-4">
+
+    <h2 class="mb-4">Share Market Portfolio Tracker</h2>
+
+    <!-- Buy Section -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Buy Shares</h5>
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <input type="text" id="buyCompany" class="form-control" placeholder="Company Name">
+                </div>
+                <div class="col-md-3">
+                    <input type="number" id="buyQuantity" class="form-control" placeholder="Quantity">
+                </div>
+                <div class="col-md-3">
+                    <input type="number" id="buyPrice" class="form-control" placeholder="Price per Share">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success w-100" onclick="buyShareHandler()">Buy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sell Section -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Sell Shares</h5>
+            <div class="row g-2">
+                <div class="col-md-5">
+                    <input type="text" id="sellCompany" class="form-control" placeholder="Company Name">
+                </div>
+                <div class="col-md-5">
+                    <input type="number" id="sellQuantity" class="form-control" placeholder="Quantity">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-danger w-100" onclick="sellShareHandler()">Sell</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Show Value -->
+    <div class="mb-3">
+        <button class="btn btn-primary" onclick="totalValueHandler()">Show Portfolio Value</button>
+    </div>
+
+    <!-- Output -->
+    <pre id="output"></pre>
+
+<script>
+function portfolioTracker() {
+    let portfolio = [];
+
+    function buyShare(company, quantity, price) {
+        let existing = portfolio.find(s => s.company === company);
+        if (existing) {
+            existing.quantity += quantity;
+        } else {
+            portfolio.push({ company, quantity, price });
+        }
+        logMessage(Bought ${quantity} shares of ${company} at ${price} each. ₹);
+    }
+
+    function sellShare(company, quantity) {
+        let existing = portfolio.find(s => s.company === company);
+        if (existing && existing.quantity >= quantity) {
+            existing.quantity -= quantity;
+            logMessage(Sold ${quantity} shares of ${company}.);
+        } else {
+            logMessage(Not enough shares of ${company} to sell.);
+        }
+    }
+
+    function totalValue() {
+        let total = portfolio.reduce((sum, s) => sum + s.quantity * s.price, 0);
+        logMessage(Portfolio Value: ${total} ₹);
+    }
+
+    function logMessage(msg) {
+        document.getElementById('output').textContent += msg + "\n";
+    }
+
+    return { buyShare, sellShare, totalValue };
+}
+
+const tracker = portfolioTracker();
+
+function buyShareHandler() {
+    const company = document.getElementById('buyCompany').value.trim();
+    const quantity = parseInt(document.getElementById('buyQuantity').value);
+    const price = parseFloat(document.getElementById('buyPrice').value);
+    if (company && quantity > 0 && price > 0) {
+        tracker.buyShare(company, quantity, price);
+    }
+}
+
+function sellShareHandler() {
+    const company = document.getElementById('sellCompany').value.trim();
+    const quantity = parseInt(document.getElementById('sellQuantity').value);
+    if (company && quantity > 0) {
+        tracker.sellShare(company, quantity);
+    }
+}
+
+function totalValueHandler() {
+    tracker.totalValue();
+}
+</script>
+
+</body>
+</html>

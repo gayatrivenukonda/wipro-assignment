@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Equality & Inequality Checker</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        #output { margin-top: 20px; text-align: left; display: inline-block; }
+    </style>
+</head>
+<body>
+
+<h2>Equality & Inequality Checker</h2>
+<button onclick="checkEquality()">Start Comparison</button>
+
+<div id="output"></div>
+
+<script>
+function checkEquality() {
+    let val1 = prompt("Enter first value:");
+    let val2 = prompt("Enter second value:");
+
+    // Convert the second value to number (for demonstration difference)
+    let numVal2 = Number(val2);
+
+    // Show types
+    let result = <p>First Value: ${val1} (${typeof val1})</p>;
+    result += <p>Second Value: ${numVal2} (${typeof numVal2})</p>;
+
+    // Comparisons
+    result += <p>Using == : ${val1 == numVal2} → Equality ignores type</p>;
+    result += <p>Using === : ${val1 === numVal2} → Strict equality checks type too</p>;
+    result += <p>Using != : ${val1 != numVal2} → Values considered equal</p>;
+    result += <p>Using !== : ${val1 !== numVal2} → Strict inequality because types differ</p>;
+
+    document.getElementById("output").innerHTML = result;
+}
+</script>
+
+</body>
+</html>
